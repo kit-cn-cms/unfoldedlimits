@@ -222,25 +222,25 @@ for samples, listname in zip(lists, listnames):
                 samplescript += """combineTool.py -M Impacts -m 125 --doInitialFit  """ + range_as_bonly + """ -t -1 --expectSignal=0 --saveNLL  """ + commonImpactfitoptions + """ | tee initialFit_asimov_bonly.log\n"""
                 samplescript += """combineTool.py -M Impacts -m 125 --doFits --parallel 2 """ + range_as_bonly + """  -t -1 --expectSignal=0 --saveNLL  """ + commonImpactfitoptions + """ | tee doFits_asimov_bonly.log\n"""
                 samplescript += """combineTool.py -M Impacts -m 125 -d ws.root -o impacts_asimov_bonly.json -t -1 --expectSignal=0 | tee createJson_asimov_bonly.log\n"""
-                samplescript += """plotImpacts.py -i impacts_asimov_bonly.json -o impacts_b_only --per-page 50 | tee plotImpact_asimov_bonly.log\n"""
+                samplescript += """plotImpacts.py -i impacts_asimov_bonly.json -o impacts_b_only"""+sample+""" --per-page 50 | tee plotImpact_asimov_bonly.log\n"""
 
                 samplescript += """combineTool.py -M Impacts -m 125 --doInitialFit """ + range_as_bs + """ -t -1 --expectSignal=1  --saveNLL  """ + commonImpactfitoptions + """ | tee initialFit_asimov_bs.log\n"""
                 samplescript += """combineTool.py -M Impacts -m 125 --doFits --parallel 2 """ + range_as_bs + """ -t -1 --expectSignal=1  --saveNLL  """ + commonImpactfitoptions + """ | tee doFits_asimov_bs.log\n"""
                 samplescript += """combineTool.py -M Impacts -m 125 -d ws.root -o impacts_asimov_bs.json -t -1 --expectSignal=1 | tee createJson_asimov_bs.log\n"""
-                samplescript += """plotImpacts.py -i impacts_asimov_bs.json -o impacts_bs --per-page 50 | tee plotImpact_asimov_bs.log\n"""
+                samplescript += """plotImpacts.py -i impacts_asimov_bs.json -o impacts_bs"""+sample+""" --per-page 50 | tee plotImpact_asimov_bs.log\n"""
 
                 samplescript += """combineTool.py -M Impacts -m 125 --doInitialFit --forceRecreateNLL """ + range_obs + """ --saveNLL  """ + commonImpactfitoptions + """ | tee initialFit_obs.log\n"""
                 samplescript += """combineTool.py -M Impacts -m 125 --doFits --parallel 2 """ + range_obs + """  --saveNLL  """ + commonImpactfitoptions + """ | tee doFits_obs.log\n"""
                 samplescript += """combineTool.py -M Impacts -m 125 -d ws.root -o impacts_obs.json  | tee createJson_obs.log\n"""
-                samplescript += """plotImpacts.py -i impacts_obs.json -o impacts_obs --per-page 50 | tee plotImpact_obs.log\n"""
+                samplescript += """plotImpacts.py -i impacts_obs.json -o impacts_obs"""+sample+""" --per-page 50 | tee plotImpact_obs.log\n"""
 
             if doPulls:
                 samplescript += """python /nfs/dust/cms/user/swieland/Darkmatter/pyroot-plotscripts/tools/diffNuisances.py fitDiagnostics""" + sample + \
-                    """asimov_bonly.root -g pulls_bonly -a 2>&1 | tee makePullsasimov_bonly.log\n"""
+                    """asimov_bonly.root -g pulls_bonly"""+sample+""" -a 2>&1 | tee makePullsasimov_bonly.log\n"""
                 samplescript += """python /nfs/dust/cms/user/swieland/Darkmatter/pyroot-plotscripts/tools/diffNuisances.py fitDiagnostics""" + sample + \
-                    """asimov_bs.root -g pulls_bs -a 2>&1 | tee makePullsasimov_bs.log\n""" 
+                    """asimov_bs.root -g pulls_bs"""+sample+""" -a 2>&1 | tee makePullsasimov_bs.log\n""" 
                 samplescript += """python /nfs/dust/cms/user/swieland/Darkmatter/pyroot-plotscripts/tools/diffNuisances.py fitDiagnostics""" + sample + \
-                    """obs.root -g pulls_obs -a 2>&1 | tee makePulls_obs.log\n"""               
+                    """obs.root -g pulls_obs"""+sample+""" -a 2>&1 | tee makePulls_obs.log\n"""               
             samplescript += "cd .. \n"
         samplescript += "cd .. \n"
 
