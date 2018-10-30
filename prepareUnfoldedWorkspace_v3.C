@@ -342,7 +342,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   std::vector<TString> includeSystematics; // keep track of all used systematics
   // Declare Samples
   unfolded.name = "unfolded";
-  unfolded.histName = "unfolded_Evt_Pt_GenMET";
+  unfolded.histName = "unfolded_Gen_Hadr_Recoil_Pt";
   // add stat unc, for each bin
   // for (int iBin = NbinMin; iBin <= Nbins; iBin++) {
   //   unfShapeSysts.push_back(std::make_tuple(TString::Format("Input_Bin%i", iBin), nullptr));
@@ -365,7 +365,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
 
   if (doCombination) {
     unfoldedATLAS.name = "unfoldedATLAS";
-    unfoldedATLAS.histName = "unfoldednotATLAS_Evt_Pt_GenMET";
+    unfoldedATLAS.histName = "unfoldednotATLAS_Gen_Hadr_Recoil_Pt";
     unfoldedATLAS.shapeSysts = unfShapeSystsATLAS;
     unfoldedATLAS.LNSysts = unfLNSystsATLAS;
     Samples.push_back(unfoldedATLAS);
@@ -374,7 +374,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   }
 
   z_nunu_jets.name = "z_nunu_jets";
-  z_nunu_jets.histName = "z_nunu_jets_Evt_Pt_GenMET";
+  z_nunu_jets.histName = "z_nunu_jets_Gen_Hadr_Recoil_Pt";
   z_nunu_jets.shapeSysts = z_nunu_ShapeSysts;
   z_nunu_jets.LNSysts = z_nunu_LNSysts;
   Samples.push_back(z_nunu_jets);
@@ -382,7 +382,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : z_nunu_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   w_lnu_jets.name = "w_lnu_jets";
-  w_lnu_jets.histName = "w_lnu_jets_Evt_Pt_GenMET";
+  w_lnu_jets.histName = "w_lnu_jets_Gen_Hadr_Recoil_Pt";
   w_lnu_jets.shapeSysts = w_lnu_ShapeSysts;
   w_lnu_jets.LNSysts = w_lnu_LNSysts;
   Samples.push_back(w_lnu_jets);
@@ -390,7 +390,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : w_lnu_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   Diboson.name = "diboson";
-  Diboson.histName = "diboson_Evt_Pt_GenMET";
+  Diboson.histName = "diboson_Gen_Hadr_Recoil_Pt";
   Diboson.shapeSysts = Diboson_ShapeSysts;
   Diboson.LNSysts = Diboson_LNSysts;
   Samples.push_back(Diboson);
@@ -398,7 +398,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : Diboson_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   z_ll_jets.name = "z_ll_jets";
-  z_ll_jets.histName = "z_ll_jets_Evt_Pt_GenMET";
+  z_ll_jets.histName = "z_ll_jets_Gen_Hadr_Recoil_Pt";
   z_ll_jets.shapeSysts = z_ll_jets_ShapeSysts;
   z_ll_jets.LNSysts = z_ll_jets_LNSysts;
   Samples.push_back(z_ll_jets);
@@ -406,7 +406,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : z_ll_jets_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   ttbar.name = "ttbar";
-  ttbar.histName = "ttbar_Evt_Pt_GenMET";
+  ttbar.histName = "ttbar_Gen_Hadr_Recoil_Pt";
   ttbar.shapeSysts = ttbar_ShapeSysts;
   ttbar.LNSysts = ttbar_LNSysts;
   Samples.push_back(ttbar);
@@ -414,7 +414,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : ttbar_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   singletop.name = "singletop";
-  singletop.histName = "singletop_Evt_Pt_GenMET";
+  singletop.histName = "singletop_Gen_Hadr_Recoil_Pt";
   singletop.shapeSysts = singletop_ShapeSysts;
   singletop.LNSysts = singletop_LNSysts;
   Samples.push_back(singletop);
@@ -422,7 +422,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : singletop_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   qcd.name = "qcd";
-  qcd.histName = "qcd_Evt_Pt_GenMET";
+  qcd.histName = "qcd_Gen_Hadr_Recoil_Pt";
   qcd.shapeSysts = qcd_ShapeSysts;
   qcd.LNSysts = qcd_LNSysts;
   Samples.push_back(qcd);
@@ -430,7 +430,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : qcd_LNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   gamma_jets.name = "gamma_jets";
-  gamma_jets.histName = "gamma_jets_Evt_Pt_GenMET";
+  gamma_jets.histName = "gamma_jets_Gen_Hadr_Recoil_Pt";
   gamma_jets.shapeSysts = gamma_jets_ShapeSysts;
   gamma_jets.LNSysts = gamma_jets_LNSysts;
   Samples.push_back(gamma_jets);
@@ -569,7 +569,6 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
         systName_1d = sys + "Up";
         systName_1u = sys + "Down";
         TH1* h_sysd = nullptr;
-
         if (!Sample.signal && !Sample.name.Contains("ATLAS")) h_sysd = (TH1*) file->Get(histname + "_" + systName_1d);
         else if (!Sample.signal && Sample.name.Contains("ATLAS")) h_sysd = (TH1D*) ATLASfile->Get(histname + "_" + systName_1d);
         else if (Sample.signal) h_sysd = (TH1*) Signalfile->Get(histname + "_" + systName_1d);
@@ -588,7 +587,6 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
           cout << "couldn't open " << histname + "_"  + systName_1u << endl;
           continue;
         }
-
 
         //Scale MC Samples with factor 2 if doing combination
         if (!name.Contains("unfolded") && doCombination) h_sysd->Scale(2.);
@@ -630,16 +628,12 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
         n_nom += Samples[2].h_nominal->GetBinContent(iBin);
       }
 
-      // if (!Sample.signal && !Sample.name.Contains("unfolded")) { // add stat error of bkgs to cov matrix
-      //   // if (!Sample.name.Contains("unfolded")) { // add stat error of bkgs to cov matrix and signal
-      //   // if (!Sample.signal) { // add stat error of bkgs and unfolded to cov matrix
-      //   // double staterror = sqrt(n_nom);
-      //   double staterror = n_nom_sigma * n_nom_sigma;
-      //   if (Sample.name.Contains("unfolded")) staterror *= sqrt(1 / 2.);
-      //   cout << "adding " << staterror << " to diagonal of cov for " << Sample.name << " in Bin " << iBin << endl;
-      //   cov(iBin - NbinMin, iBin - NbinMin) += staterror;
-      //   cout << "diagonal at " << iBin - NbinMin << " is: " << cov(iBin - NbinMin, iBin - NbinMin) << endl;
-      // }
+      if (!Sample.signal && !Sample.name.Contains("unfolded")) { // add stat error of bkgs to cov matrix
+        double staterror = n_nom_sigma * n_nom_sigma;
+        cout << "adding " << staterror << " to diagonal of cov for " << Sample.name << " in Bin " << iBin << endl;
+        cov(iBin - NbinMin, iBin - NbinMin) += staterror;
+        cout << "diagonal at " << iBin - NbinMin << " is: " << cov(iBin - NbinMin, iBin - NbinMin) << endl;
+      }
       RooRealVar* realVar_n_nom = (RooRealVar*)w.factory(TString::Format("n_nom_%s_Bin%d[%.3e]", (Sample.name).Data(), iBin, n_nom));
       realVar_n_nom->setVal(n_nom);
       realVar_n_nom->setConstant(true);
