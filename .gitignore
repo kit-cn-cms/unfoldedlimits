@@ -1,5 +1,5 @@
-~.pdf
-~.root
-~.d
-~.so
-~.pcm
+*.pdf
+*.root
+*.d
+*.so
+*.pcm
