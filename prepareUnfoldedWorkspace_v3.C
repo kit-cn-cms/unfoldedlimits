@@ -133,8 +133,8 @@ vector<std::tuple<TString, float>> unfLNSystsATLAS{
 
 //signal
 std::vector<std::tuple<TString, TH1*>> sigShapeSysts = {
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("signal_scale_variation_muR", nullptr),
+  std::make_tuple("signal_scale_variation_muF", nullptr),
 
 };
 
@@ -233,8 +233,8 @@ vector<std::tuple<TString, float>> z_ll_jets_LNSysts{
 
 // ttbar
 std::vector<std::tuple<TString, TH1*>> ttbar_ShapeSysts{
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("powheg_scale_variation_muR", nullptr),
+  std::make_tuple("powheg_scale_variation_muF", nullptr),
   // std::make_tuple("Weight_PDF", nullptr),
 };
 
@@ -245,8 +245,8 @@ vector<std::tuple<TString, float>> ttbar_LNSysts{
 
 // singletop
 std::vector<std::tuple<TString, TH1*>> singletop_ShapeSysts{
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("powheg_scale_variation_muR", nullptr),
+  std::make_tuple("powheg_scale_variation_muF", nullptr),
   // std::make_tuple("Weight_PDF", nullptr),
 };
 
@@ -258,8 +258,8 @@ vector<std::tuple<TString, float>> singletop_LNSysts{
 
 // qcd
 std::vector<std::tuple<TString, TH1*>> qcd_ShapeSysts{
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("madgraph_scale_variation_muR", nullptr),
+  std::make_tuple("madgraph_scale_variation_muF", nullptr),
   // std::make_tuple("Weight_PDF", nullptr),
 };
 
@@ -269,8 +269,8 @@ vector<std::tuple<TString, float>> qcd_LNSysts{
 
 // gamma_jets
 std::vector<std::tuple<TString, TH1*>> gamma_jets_ShapeSysts{
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("madgraph_scale_variation_muR", nullptr),
+  std::make_tuple("madgraph_scale_variation_muF", nullptr),
   // std::make_tuple("Weight_PDF", nullptr),
 };
 
@@ -297,7 +297,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   TFile*  ATLASfile = nullptr;
   if (realdata) {
     // file  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/scaledData.root", "Could not read input file");
-    file  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/data.root", "Could not read input file");
+    file  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/data_normedmuRmuF.root", "Could not read input file");
     ATLASfile  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/ATLAS_CMSCopy.root", "Could not read input file");
   }
   else {
@@ -308,7 +308,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
 //   TFile*  Signalfile  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/AxialSignals.root", "Could not read input file");
   TFile* MCDatafile  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/MCdata.root", "Could not read input file");
 
-  file  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/data.root", "Could not read input file");
+  file  = ReadTFile("/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/data_normedmuRmuF.root", "Could not read input file");
 
 
   bool isSplitSample = false;
@@ -355,7 +355,7 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
   for (auto &lnsys : unfLNSysts) includeSystematics.push_back(get<0>(lnsys));
 
   sig.name = "signal";
-  sig.histName = signalname;
+  sig.histName = TString(signalname) + "_Gen_Hadr_Recoil_Pt";
   sig.shapeSysts = sigShapeSysts;
   sig.LNSysts = sigLNSysts;
   sig.signal = true;
@@ -439,12 +439,12 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
 
   TString fileName = nullptr;
   if (!doCombination) {
-    if (realdata) fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/CMS/" + sig.histName + "/realData/ws.root";
-    else fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/CMS/" + sig.histName + "/MCData/ws.root";
+    if (realdata) fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/CMS/" + TString(signalname) + "/realData/ws.root";
+    else fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/CMS/" + TString(signalname) + "/MCData/ws.root";
   }
   else {
-    if (realdata) fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/combined/" + sig.histName + "/realData/ws.root";
-    else fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/combined/" + sig.histName + "/MCData/ws.root";
+    if (realdata) fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/combined/" + TString(signalname) + "/realData/ws.root";
+    else fileName = "/nfs/dust/cms/user/swieland/Darkmatter/CombineStuff/unfoldedlimits/workdir/combined/" + TString(signalname) + "/MCData/ws.root";
   }
   RooWorkspace w("w");
   w.factory("r[0,-10,10]");
@@ -620,7 +620,6 @@ void prepareUnfoldedWorkspace_v3(const char* signalname = "Axial_MonoJ_NLO_Mphi-
     TH1* nom = Sample.h_nominal;
     for (Int_t iBin = NbinMin ; iBin <= Nbins; iBin++) {
       double n_nom = nom->GetBinContent(iBin);
-      // if (Sample.signal) n_nom /= 2.;
       cout << n_nom << " for Sample " << Sample.name << endl;
       double n_nom_sigma = nom->GetBinError(iBin);
       cout << n_nom_sigma << endl;
