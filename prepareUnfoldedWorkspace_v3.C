@@ -144,8 +144,8 @@ vector<std::tuple<TString, float>> sigLNSysts{
 
 // z_nunu_jets
 std::vector<std::tuple<TString, TH1*>> z_nunu_ShapeSysts = {
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("amc_scale_variation_muR", nullptr),
+  std::make_tuple("amc_scale_variation_muF", nullptr),
   std::make_tuple("Weight_PDF", nullptr),
 
 
@@ -171,8 +171,8 @@ vector<std::tuple<TString, float>> z_nunu_LNSysts{
 
 // w_lnu_jets
 std::vector<std::tuple<TString, TH1*>> w_lnu_ShapeSysts{
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("amc_scale_variation_muR", nullptr),
+  std::make_tuple("amc_scale_variation_muF", nullptr),
   std::make_tuple("Weight_PDF", nullptr),
 
   std::make_tuple("BosonWeight_QCD1", nullptr),
@@ -207,8 +207,8 @@ vector<std::tuple<TString, float>> Diboson_LNSysts{
 
 // z_ll_jets
 std::vector<std::tuple<TString, TH1*>> z_ll_jets_ShapeSysts{
-  std::make_tuple("Weight_scale_variation_muR", nullptr),
-  std::make_tuple("Weight_scale_variation_muF", nullptr),
+  std::make_tuple("amc_scale_variation_muR", nullptr),
+  std::make_tuple("amc_scale_variation_muF", nullptr),
   std::make_tuple("Weight_PDF", nullptr),
 
   std::make_tuple("BosonWeight_QCD1", nullptr),
