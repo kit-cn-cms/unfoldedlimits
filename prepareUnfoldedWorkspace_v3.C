@@ -112,19 +112,19 @@ vector<std::tuple<TString, float>> unfLNSysts{ // not working in current context
 
 //unfolded ATLAS
 std::vector<std::tuple<TString, TH1*>>unfShapeSystsATLAS = {
-  std::make_tuple("ATLASCMS_scale_j", nullptr),
-  std::make_tuple("ATLASCMS_res_j", nullptr),
+  std::make_tuple("ATLAS_CMS_scale_j", nullptr),
+  std::make_tuple("ATLAS_CMS_res_j", nullptr),
 
-  std::make_tuple("ATLASCMS_btag_lf", nullptr),
-  std::make_tuple("ATLASCMS_btag_hf", nullptr),
-  std::make_tuple("ATLASCMS_btag_hfstats1", nullptr),
-  std::make_tuple("ATLASCMS_btag_lfstats1", nullptr),
-  std::make_tuple("ATLASCMS_btag_hfstats2", nullptr),
-  std::make_tuple("ATLASCMS_btag_lfstats2", nullptr),
-  std::make_tuple("ATLASCMS_btag_cferr1", nullptr),
-  std::make_tuple("ATLASCMS_btag_cferr2", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_lf", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_hf", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_hfstats1", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_lfstats1", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_hfstats2", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_lfstats2", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_cferr1", nullptr),
+  std::make_tuple("ATLAS_CMS_btag_cferr2", nullptr),
 
-  std::make_tuple("ATLASWeight_PU", nullptr),
+  std::make_tuple("ATLAS_Weight_PU", nullptr),
 };
 
 vector<std::tuple<TString, float>> unfLNSystsATLAS{
