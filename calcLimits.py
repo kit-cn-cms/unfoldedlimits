@@ -195,8 +195,7 @@ for samples, listname in zip(lists, listnames):
                 samplescript += "mkdir -p MCData\n"
                 wsString = ", true"                
             if k == 1: wsString = ", false"
-
- 
+             
             samplescript += string
 
             if mode == "CMS":

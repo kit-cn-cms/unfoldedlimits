@@ -21,13 +21,19 @@ canvas.cd()
 canvas.SetCanvasSize(w,h)
 
 expGraph = combinedfile.Get("MCgraph_expected")
+expGraph.SetMarkerStyle(20)
+expGraph.GetHistogram().Smooth()
+expGraph.GetHistogram().SetContour(1000)
+expGraph.SetNpx(500)
+expGraph.SetNpy(500)
+
 ROOT.gPad.SetLogz()
 expGraph.Draw("colz")
-expGraph.GetHistogram().GetXaxis().SetTitle("m_{med} [GeV/c^{2}]")
+expGraph.GetHistogram().GetXaxis().SetTitle("m_{med} [GeV]")
 expGraph.GetHistogram().GetXaxis().SetTitleSize(0.05)
 expGraph.GetHistogram().GetXaxis().SetTitleOffset(0.8)
 
-expGraph.GetHistogram().GetYaxis().SetTitle("m_{DM} [GeV/c^{2}]")
+expGraph.GetHistogram().GetYaxis().SetTitle("m_{DM} [GeV]")
 expGraph.GetHistogram().GetYaxis().SetTitleSize(0.05)
 expGraph.GetHistogram().GetYaxis().SetTitleOffset(0.8)
 
@@ -74,5 +80,16 @@ legend.AddEntry(expContUp1,"Combined median expected #pm 1 #sigma","l");
 legend.AddEntry(expContCMS,"Median expected","l");
 legend.AddEntry(expContCMSUp1,"Median expected #pm 1 #sigma","l");
 legend.Draw();
+
+cms = ROOT.TLatex(0.12, 0.91, 'CMS private work in progress'  )
+cms.SetNDC()
+cms.SetTextSize(0.04)
+ROOT.gStyle.SetPalette(1)
+lumi = ROOT.TLatex(0.7, 0.91, '35.9 fb^{-1} (13 TeV)'  )
+lumi.SetNDC()
+lumi.SetTextSize(0.03)
+
+cms.Draw()
+lumi.Draw()
 
 canvas.SaveAs("combinedLimitAxial.pdf")

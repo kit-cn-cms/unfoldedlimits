@@ -139,7 +139,7 @@ std::vector<std::tuple<TString, TH1*>> sigShapeSysts = {
 };
 
 vector<std::tuple<TString, float>> sigLNSysts{
-  std::make_tuple("XS_signal", 1.05),
+  // std::make_tuple("XS_signal", 1.05),
 };
 
 // z_nunu_jets

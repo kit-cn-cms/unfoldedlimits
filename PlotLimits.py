@@ -2,6 +2,8 @@
 # python PlotLimits.py Axial expected ATLAS workdir/ATLAS/Axial_MonoJ_NLO_Mphi-*/higgsCombineAxial_MonoJ_NLO_Mphi-*.AsymptoticLimits.mH120.root
 # python PlotLimits.py Axial expected combined workdir/combined/Axial_MonoJ_NLO_Mphi-*/higgsCombineAxial_MonoJ_NLO_Mphi-*.AsymptoticLimits.mH120.root
 
+# python PlotLimits.py --coupling Axial --type=observed --datatype=both --dontExcludeFailedFits --LimitsPath=workdir/combined -o combined
+
 import ROOT
 import csv
 from array import array
@@ -43,28 +45,41 @@ def GetLimit(file_,type="expected"):
     rootfile.Close()
     return limit
 
-def GetMasses(file_):
+def GetMasses(file_, datatype_):
     string_ = file_
     print string_
     index_l = string_.find("Mphi")
     index_m = string_.find("Mchi")
     index_r = string_.find("gSM")
     mphi = string_[index_l:index_m-1]
-    mphi = mphi.replace("Mphi-","")
     mchi = string_[index_m:index_r-1] 
-    mchi = mchi.replace("Mchi-","")
+
+    if datatype == "none":
+        mphi = mphi.replace("Mphi_","")
+        mchi = mchi.replace("Mchi_","")
+    else:
+        mphi = mphi.replace("Mphi-","")
+        mchi = mchi.replace("Mchi-","")
+
+
     return [float(mphi),float(mchi)]
 
-def GetXS(file_reader,coupling,mphi,mchi):
+def GetXS(file_reader,coupling,mphi,mchi,datatype):
     xs = None
     for row in file_reader:
         #print row['sample']
         if not coupling in str(row['sample']):
             continue
-        if row['sample'].find('Mphi-'+str(int(mphi))+"_")!=-1 and row['sample'].find('Mchi-'+str(int(mchi))+"_")!=-1:
-            print "---------------------------------------------------------------------------------------"
-            if str(row['xs'])!="":
-                xs = float(row['xs'])
+        if datatype == "none":            
+            if row['sample'].find('Mphi_'+str(int(mphi))+"_")!=-1 and row['sample'].find('Mchi_'+str(int(mchi))+"_")!=-1:
+                print "---------------------------------------------------------------------------------------"
+                if str(row['xs'])!="":
+                    xs = float(row['xs'])
+        else:
+            if row['sample'].find('Mphi-'+str(int(mphi))+"_")!=-1 and row['sample'].find('Mchi-'+str(int(mchi))+"_")!=-1:
+                print "---------------------------------------------------------------------------------------"
+                if str(row['xs'])!="":
+                    xs = float(row['xs'])            
     return xs
  
 def h2graph(in_hist): # could be TH2F, etc.
@@ -100,7 +115,7 @@ def set_color_env():
     ROOT.TColor.CreateGradientColorTable(NRGBs, stopsArray, redArray, greenArray, blueArray, NCont)
     ROOT.gStyle.SetNumberContours(NCont)
 
-set_color_env()
+# set_color_env()
 
 
 usage = "usage: %prog [options]"
@@ -129,7 +144,7 @@ default = "expected"
 
 parser.add_option("--datatype",
 dest="datatype",
-help="realData/MCData/both (meaning: Exp. from MCData, obs from realData",
+help="realData/MCData/both/none (meaning: exp. from MCData, obs. from realData",
 metavar = "datatype",
 default = "realData"
 )
@@ -165,6 +180,8 @@ print limit_type
 datatypes = [datatype]
 if datatype == "both":
     datatypes = ["realData", "MCData"]
+elif datatype == "none":
+    datatypes = ["dummy"]
 
 files=[[],[]]
 excluded=[]
@@ -172,15 +189,24 @@ excluded=[]
 for subdir, dirs, files_ in os.walk(LimitsPath):
     # print subdir
     for i,datatyp in enumerate(datatypes):
-        if datatyp in subdir:
+        if datatyp in subdir or datatype == "none":
             # print "found one"
             for file in files_:
                 # print file
-                if file.startswith("fitDiagnostics") and not ("PseudoExperiment" in os.path.join(subdir, file)) and (coupling in os.path.join(subdir, file)) and ("obs" in os.path.join(subdir, file)):
+                filepath=os.path.join(subdir, file)
+                # print "filepath:", filepath
+                if datatype == "none" and (coupling in filepath) and "Limits" in filepath:
+                    print "LimitsFile found:", filepath
+                    if "Vector_MonoJ_NLO_Mphi_1500_Mchi_600_gSM_0p25_gDM_1p0" in filepath:
+                        continue
+                    files[i].append(filepath)
+
+
+                elif file.startswith("fitDiagnostics") and not ("PseudoExperiment" in os.path.join(subdir, file)) and (coupling in os.path.join(subdir, file)) and (("obs" in os.path.join(subdir, file))):
                 # if file.startswith("fitDiagnostics") and (coupling in file) and ("obs" in os.path.join(subdir, file)):
                     # print os.path.join(subdir, file)
                     # print file
-                    filepath=os.path.join(subdir, file)
+                    # filepath=os.path.join(subdir, file)
                     # print filepath
                     rootfile = ROOT.TFile(filepath,"OPEN")
 
@@ -215,7 +241,7 @@ for subdir, dirs, files_ in os.walk(LimitsPath):
                     fit_s.Delete()
 
 
-print files
+# print files
 reader = None
 csvfile = open('Madgraph_Signal_XS.csv',"r")
 reader = csv.DictReader(csvfile)
@@ -244,13 +270,14 @@ y=ROOT.Double(0)
 # real Data
 for i in range(len(files[0])): 
     csvfile.seek(0)
-    masses = GetMasses(files[0][i])
-    # xs = GetXS(reader,coupling,masses[0],masses[1])
+    masses = GetMasses(files[0][i], datatype)
+    # xs = GetXS(reader,coupling,masses[0],masses[1],datatype)
     # if xs==None:
         # continue
     print "mphi,mchi ",masses
     # print "xs ",xs
     points.SetPoint(i,masses[0], masses[1])
+    # points.Print()
 
     n = points.GetPoint(i,x,y)
     print x,y
@@ -266,16 +293,16 @@ for i in range(len(files[0])):
         # print "mu/xs ",ratio
         graphlist[j].SetPoint(i,masses[0],masses[1],limit)
         # graphlist[j].SetPoint(i,masses[0],masses[1],ratio)
-
-        # graphlist[j].SetMarginBinsContent(500)
+        if datatype != "none" or coupling == "Vector":
+            graphlist[j].SetMarginBinsContent(500)
 
 
 #MC data
-if datatype=="both":
+if datatype == "both":
     for i in range(len(files[1])):
         csvfile.seek(0)
-        masses = GetMasses(files[1][i])
-        # xs = GetXS(reader,coupling,masses[0],masses[1])
+        masses = GetMasses(files[1][i], datatype)
+        # xs = GetXS(reader,coupling,masses[0],masses[1],datatype)
         # if xs==None:
             # continue
         print "MCData mphi,mchi ",masses
@@ -291,44 +318,48 @@ if datatype=="both":
             graphlistMCdata[j].SetPoint(i,masses[0],masses[1],limit)
             # graphlistMCdata[j].SetPoint(i,masses[0],masses[1],ratio)
 
-            # graphlistMCdata[j].SetMarginBinsContent(500)
+            graphlistMCdata[j].SetMarginBinsContent(500)
 
 
 graph=graphlist[0]
+# print graph
 if datatype == "both":
     graph=graphlistMCdata[0] #get median expected from MCdata
 # graph=graphlist[len(graphlist)-1]
 # graph=graphlist[4]
-
 graph.SetNpx(500)
 graph.SetNpy(500)
-graph.GetHistogram().GetXaxis().SetTitle("m_{med} [GeV/c^{2}]")
+graph.Print()
+graph.GetHistogram().GetXaxis().SetTitle("m_{med} [GeV]")
 graph.GetHistogram().GetXaxis().SetTitleSize(0.05)
 graph.GetHistogram().GetXaxis().SetTitleOffset(0.8)
 
-graph.GetHistogram().GetYaxis().SetTitle("m_{DM} [GeV/c^{2}]")
+graph.GetHistogram().GetYaxis().SetTitle("m_{DM} [GeV]")
 graph.GetHistogram().GetYaxis().SetTitleSize(0.05)
 graph.GetHistogram().GetYaxis().SetTitleOffset(0.8)
 
 #graph.GetHistogram().SetMaximum(100.)
+
 
 graph.GetHistogram().SetMinimum(0.01)
 graph.GetHistogram().GetZaxis().SetTitle("#sigma_{95% CL}^{expected}/#sigma_{th}")
 graph.GetHistogram().GetZaxis().SetTitleSize(0.05)
 graph.GetHistogram().GetZaxis().SetTitleOffset(0.8)
 graph.SetTitle("Exclusion limits at 95% CL")
-
+# graph.SetMargin(0.)
+# graph.SetMarginBinsContent(0.1);
 graph.SetMarkerStyle(20)
 graph.GetHistogram().Smooth()
 graph.GetHistogram().SetContour(1000)
 # graph.GetHistogram().Draw("tri1colz")
+# graph.GetHistogram().Draw("colz")
 # canvas.SetTheta(90)
 # canvas.SetPhi(0)
-# graph.Draw("tri2colz")
+# graph.Draw("tri1colz")
 # raw_input()
-# graph.SetMarginBinsContent(500);
 graph.Draw("colz")
 
+graph.GetHistogram().SetAxisRange(0.02, 50.,"Z");
 
 # graph.Draw("colz2 tri1")
 
@@ -344,7 +375,7 @@ lumi.SetTextSize(0.03)
 contours = array('d',[1.0])
 contgraphs=[]
 
-if datatype=="both":
+if datatype=="both" and datatype != "none":
     for k, gr in enumerate(graphlistMCdata):
         graph_copy = gr.Clone()
         graph_copy.GetHistogram().SetContour(1,contours)
@@ -385,7 +416,19 @@ else:
         # ROOT.gPad.Update()
 
 print contgraphs
-# for gr in contgraphs:
+
+if datatype != "none" or coupling == "Vector":
+    for gr in graphlist:
+        gr.SetMarginBinsContent(0)
+    for gr in graphlistMCdata:
+        gr.SetMarginBinsContent(0)
+#     print "prior:", gr.GetN()
+#     for i in range(gr.GetN()):
+
+#     # for i in range(50, 139):
+#         gr.RemovePoint(i)
+#     print "after:", gr.GetN()
+
 #     gr.Print()
 #     gr.Draw("AC")
 #     canvas.Update()
@@ -410,7 +453,11 @@ contgraphs[2].SetLineStyle(5)
 
 
 if limit_type == "observed":
+    # for i in range(10, contgraphs[len(contgraphs)-1].GetN()+1):
+    # # for i in range(50, 139):
+    #     contgraphs[len(contgraphs)-1].RemovePoint(i)
     contgraphs[len(contgraphs)-1].Draw("C")
+    # contgraphs[len(contgraphs)-1].Print()
     contgraphs[len(contgraphs)-1].SetLineColor(ROOT.kRed)
 points.Draw("*")
 
@@ -437,6 +484,8 @@ for cont in contgraphs:
 points.SetName("points")
 points.Write()
 points.Print()
+
+canvas.Write()
 
 file.Close()
 print "excluded following samples:\n" , excluded
